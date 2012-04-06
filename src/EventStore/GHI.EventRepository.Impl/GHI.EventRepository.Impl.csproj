@@ -31,6 +31,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EventStore, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\tools\JOliverEventStore\EventStore.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\tools\JOliverEventStore\EventStore.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="EventStore.Wireup, Version=3.1.0.0, Culture=neutral, PublicKeyToken=7735eb81c0bd9948, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\tools\JOliverEventStore\EventStore.Wireup.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
@@ -60,9 +72,9 @@
       <Project>{43F90451-6A99-4C71-A5B9-8BD9DCFB8F67}</Project>
       <Name>GHI.Commons</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GHI.EventStoreRepository\GHI.EventStore.Core.csproj">
+    <ProjectReference Include="..\GHI.EventRepository\GHI.EventRepository.csproj">
       <Project>{0DDF7C6F-9678-4528-8927-AE656330AC35}</Project>
-      <Name>GHI.EventStore.Core</Name>
+      <Name>GHI.EventRepository</Name>
     </ProjectReference>
     <ProjectReference Include="..\GHI.WireUp\GHI.WireUp.csproj">
       <Project>{E3C2C7AF-3DD2-4985-A1AE-785C4F7B248C}</Project>

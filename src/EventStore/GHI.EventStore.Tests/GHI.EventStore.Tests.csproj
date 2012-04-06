@@ -80,9 +80,9 @@
       <Project>{C29E06CC-CA35-4482-A1F3-68AD142BBC08}</Project>
       <Name>GHI.EventRepository.Impl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GHI.EventStoreRepository\GHI.EventStore.Core.csproj">
+    <ProjectReference Include="..\GHI.EventRepository\GHI.EventRepository.csproj">
       <Project>{0DDF7C6F-9678-4528-8927-AE656330AC35}</Project>
-      <Name>GHI.EventStore.Core</Name>
+      <Name>GHI.EventRepository</Name>
     </ProjectReference>
     <ProjectReference Include="..\GHI.WireUp\GHI.WireUp.csproj">
       <Project>{E3C2C7AF-3DD2-4985-A1AE-785C4F7B248C}</Project>

@@ -1,0 +1,3 @@
+[submodule "JOliverEventStore"]
+	path = JOliverEventStore
+	url = https://github.com/joliver/EventStore.git
