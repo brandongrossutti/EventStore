@@ -2,7 +2,9 @@
 using GHI.Commons.Configuration;
 using GHI.Commons.IOC;
 using GHI.WireUp;
+using StructureMap;
 using StructureMap.Attributes;
+using IContainer = GHI.Commons.IOC.IContainer;
 
 namespace GHI.Bus.InMemory
 {

@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\structuremap.2.6.3\lib\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,6 +48,23 @@
     <Compile Include="MessagePublisher.cs" />
     <Compile Include="MessageSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GHI.Bus\GHI.Bus.csproj">
+      <Project>{271622D2-8BC1-43B9-98F0-DAB07026C91F}</Project>
+      <Name>GHI.Bus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GHI.Commons\GHI.Commons.csproj">
+      <Project>{43F90451-6A99-4C71-A5B9-8BD9DCFB8F67}</Project>
+      <Name>GHI.Commons</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GHI.WireUp\GHI.WireUp.csproj">
+      <Project>{E3C2C7AF-3DD2-4985-A1AE-785C4F7B248C}</Project>
+      <Name>GHI.WireUp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

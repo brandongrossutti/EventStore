@@ -15,7 +15,7 @@ namespace GHI.EventStore.Tests
         public void TestMessageSend()
         {
             InitializerWireUp wireup = new InitializerWireUp("GHI", true);
-            wireup.AddInitialization(Initializer.GetWireUp());
+            wireup.AddInitialization( Initializer.GetWireUp());
             wireup.AddInitialization(GHI.Bus.InMemory.Initializer.GetWireUp(wireup));
             wireup.Initialize();
 

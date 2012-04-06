@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using StructureMap;
+using StructureMap.Query;
 
 namespace GHI.Commons.IOC
 {
@@ -56,7 +57,7 @@ namespace GHI.Commons.IOC
 
         public void DisposeAllInstances()
         {
-            foreach (PluginTypeConfiguration pluginType in ObjectFactory.Model.PluginTypes)
+            foreach (IPluginTypeConfiguration pluginType in ObjectFactory.Model.PluginTypes)
             {
                 IList instances = ObjectFactory.GetAllInstances(pluginType.PluginType);
                 foreach (object instance in instances)
