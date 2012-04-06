@@ -1,3 +1,5 @@
+using GHI.Commons.UnitOfWork;
+
 namespace GHI.EventRepository
 {
     public interface IRepository<T>

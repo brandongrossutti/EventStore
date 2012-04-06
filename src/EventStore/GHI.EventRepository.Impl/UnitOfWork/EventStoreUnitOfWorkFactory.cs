@@ -1,34 +1,19 @@
-﻿using System;
-using GHI.Commons.Context;
 using GHI.Commons.UnitOfWork;
 
 namespace GHI.EventRepository.Impl.UnitOfWork
 {
     public class EventStoreUnitOfWorkFactory : IUnitOfWorkFactory
     {
-        private readonly EventStoreRepository _eventStoreRepository;
+        private readonly EventStoreRepository _repository;
 
-        public EventStoreUnitOfWorkFactory(EventStoreRepository _eventStoreRepository)
+        public EventStoreUnitOfWorkFactory(EventStoreRepository repository)
         {
-            _eventStoreRepository = _eventStoreRepository;
+            _repository = repository;
         }
 
         public IUnitOfWork Create()
         {
-            ILocalContext context = new ThreadLocalContext();
-            context.Set(LocalContextKey.EVENT_STORE_KEY, CurrentSession());
-            return new EventStoreUnitOfWork(_eventStoreRepository);
+            return new EventStoreUnitOfWork(_repository);
         }
-
-        public ISession CurrentSession()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ISessionFactory SessionFactory
-        {
-            get { throw new NotImplementedException(); }
-        }
-
     }
 }

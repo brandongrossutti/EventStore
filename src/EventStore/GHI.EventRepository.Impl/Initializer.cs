@@ -24,16 +24,11 @@ namespace GHI.EventRepository.Impl
             return new WireUpItem(
                 x =>
                     {
-                        x.ForRequestedType<IUnitOfWorkFactory>()
-                            .TheDefaultIsConcreteType<EventStoreUnitOfWorkFactory>()
-                            .CacheBy(InstanceScope.Singleton);
-
                         x.ForRequestedType<IRepository<Guid>>()
                             .TheDefaultIsConcreteType<EventStoreRepository>();
 
-                        x.ForRequestedType<ISessionFactory>()
-                            .TheDefaultIsConcreteType<EventStoreSessionFactory>();
-
+                        x.ForRequestedType<IUnitOfWorkFactory>()
+                            .TheDefaultIsConcreteType<EventStoreUnitOfWorkFactory>();
                     }
                 );
             
