@@ -32,7 +32,7 @@ namespace GHI.EventRepository.Impl.UnitOfWork
             _current = null;
         }
 
-        public static void Enlist<T>(AggregateRoot aggregateRoot)
+        public static void RegisterAggregateRoot<T>(AggregateRoot aggregateRoot)
         {
             var unitOfWork = Current;
             unitOfWork._aggregateRootsAffected.Add(aggregateRoot);

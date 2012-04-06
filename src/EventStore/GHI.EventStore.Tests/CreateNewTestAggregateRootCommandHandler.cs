@@ -18,7 +18,7 @@ namespace GHI.EventStore.Tests
         public void HandleMessage(CreateNewTestAggregateRootCommand message)
         {
             TestAggregateRoot root = new TestAggregateRoot(message.Id);
-            EventStoreUnitOfWork.Enlist<Guid>(root);
+            EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(root);
             //EventStoreUnitOfWork currentUnitOfWork = _sessionFactory.GetCurrentUnitOfWork() as EventStoreUnitOfWork;
             //if (currentUnitOfWork == null)
             //{
