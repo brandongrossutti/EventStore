@@ -1,6 +1,7 @@
 ﻿using System;
 using EventStore;
 using GHI.Commons.UnitOfWork;
+using GHI.EventRepository.Impl.SnapShotting;
 using GHI.EventRepository.Impl.UnitOfWork;
 using GHI.WireUp;
 using StructureMap;
@@ -29,6 +30,10 @@ namespace GHI.EventRepository.Impl
 
                         x.For<IUnitOfWorkFactory>()
                             .Use<EventStoreUnitOfWorkFactory>();
+
+                        x.For<ISnapShotStrategy>()
+                            .Singleton()
+                            .Use<NeverSnapShotStrategy>();
                     }
                 );
         }

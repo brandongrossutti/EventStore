@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventStore;
+using GHI.EventRepository.Impl.SnapShotting;
 using GHI.EventRepository.Impl.UnitOfWork;
 
 namespace GHI.EventRepository.Impl
@@ -9,12 +10,17 @@ namespace GHI.EventRepository.Impl
     public class EventStoreRepository : IRepository<Guid>, IDisposable
     {
         private IStoreEvents _eventStore;
+        private readonly ISnapShotStrategy _snapShotStrategy;
         private readonly Dictionary<Guid, AggregateRoot> _cachedRoots;
+        private readonly SnapShotTracker _snapShotTracker;
+        
 
-        public EventStoreRepository(IStoreEvents eventStore)
+        public EventStoreRepository(IStoreEvents eventStore, ISnapShotStrategy snapShotStrategy)
         {
             _eventStore = eventStore;
+            _snapShotStrategy = snapShotStrategy;
             _cachedRoots = new Dictionary<Guid, AggregateRoot>();
+            _snapShotTracker = new SnapShotTracker();
         }
 
         public T GetAggregateRoot<T>(Guid id) where T : AggregateRoot, new()
@@ -46,6 +52,7 @@ namespace GHI.EventRepository.Impl
             IEventStream stream = _eventStore.OpenStream(root.Id, 0, int.MaxValue);
             Snapshot snapshot = new Snapshot(root.Id, stream.CommitSequence, root);
             _eventStore.Advanced.AddSnapshot(snapshot);
+            _snapShotTracker.SetLastSequence(root.Id, stream.CommitSequence);
         }
 
         private IEventStream LoadRoot(Guid id)
@@ -54,6 +61,8 @@ namespace GHI.EventRepository.Impl
             Snapshot snapShot = _eventStore.Advanced.GetSnapshot(id, int.MaxValue);
             if (snapShot != null)
             {
+                int lastSnapShotSequence = snapShot.StreamRevision;
+                _snapShotTracker.SetLastSequence(id,lastSnapShotSequence);
                 stream = _eventStore.OpenStream(snapShot, int.MaxValue);
                 return stream;
             }
@@ -67,7 +76,7 @@ namespace GHI.EventRepository.Impl
             EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(root);
         }
 
-        public IEventStream OpenStream(Guid id)
+        private IEventStream OpenStream(Guid id)
         {
             return _eventStore.OpenStream(id, 0, int.MaxValue);
         }
@@ -83,6 +92,28 @@ namespace GHI.EventRepository.Impl
             if (!_cachedRoots.ContainsKey(aggregateRoot.Id))
             {
                 _cachedRoots.Add(aggregateRoot.Id, aggregateRoot);
+            }
+        }
+
+        public void Commit(AggregateRoot aggregateRoot)
+        {
+            if (aggregateRoot.HasUncommittedEvents)
+            {
+                Guid commitId = Guid.NewGuid();
+                IEventStream eventStream = OpenStream(aggregateRoot.Id);
+                foreach (IEvent uncommittedEvent in aggregateRoot.UncommittedEvents)
+                {
+                    EventMessage message = new EventMessage();
+                    message.Body = uncommittedEvent;
+                    eventStream.Add(message);
+                }
+                eventStream.CommitChanges(commitId);
+                int lastSnapShotSequence = _snapShotTracker.GetLastSequence(aggregateRoot.Id);
+                if(_snapShotStrategy.ShouldSnapShot(lastSnapShotSequence, eventStream.CommitSequence))
+                {
+                    TakeSnapshot(aggregateRoot);
+                }
+                aggregateRoot.ClearUncommitedEvents();
             }
         }
     }

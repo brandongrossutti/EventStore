@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using EventStore;
 using GHI.Commons.UnitOfWork;
 
 namespace GHI.EventRepository.Impl.UnitOfWork
@@ -41,24 +40,11 @@ namespace GHI.EventRepository.Impl.UnitOfWork
             }
         }
 
-
         public void Commit()
         {
             foreach (AggregateRoot aggregateRoot in _aggregateRootsAffected)
             {
-                if (aggregateRoot.HasUncommittedEvents)
-                {
-                    Guid commitId = Guid.NewGuid();
-                    IEventStream eventStream = _eventStorage.OpenStream(aggregateRoot.Id);
-                    foreach (IEvent uncommittedEvent in aggregateRoot.UncommittedEvents)
-                    {
-                        EventMessage message = new EventMessage();
-                        message.Body = uncommittedEvent;
-                        eventStream.Add(message);
-                    }
-                    eventStream.CommitChanges(commitId);
-                    aggregateRoot.ClearUncommitedEvents();
-                }
+                _eventStorage.Commit(aggregateRoot);
             }
             _aggregateRootsAffected.Clear();
         }
