@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using GHI.Bus;
-using GHI.EventRepository.Impl;
 using GHI.EventStore.Tests.TestClasses;
 using GHI.WireUp;
 using NUnit.Framework;
@@ -15,10 +16,12 @@ namespace GHI.EventStore.Tests
         [Test]
         public void TestMessageSend()
         {
-            InitializerWireUp wireup = new InitializerWireUp("GHI", true);
-            wireup.AddInitialization( Initializer.GetWireUp());
-            wireup.AddInitialization(GHI.Bus.InMemory.Initializer.GetWireUp(wireup));
-            wireup.Initialize();
+            var assembliesNotReferencedToLoad = new List<AssemblyName>()
+                                                    {
+                                                        new AssemblyName("GHI.EventRepository.Impl"), 
+                                                        new AssemblyName("GHI.Bus.InMemory")
+                                                    };
+            InitializerWireUp wireup = new InitializerWireUp("GHI", true, assembliesNotReferencedToLoad);
 
             IContainer container = (IContainer) ObjectFactory.GetInstance(typeof(IContainer));
             IMessagePublisher publisher = container.GetInstance<IMessagePublisher>();

@@ -7,14 +7,14 @@ using StructureMap;
 
 namespace GHI.EventRepository.Impl
 {
-    public class Initializer
+    public class Initializer : IInitializer
     {
-        public static WireUpItem GetWireUp()
+        public WireUpItem GetWireUp(InitializerWireUp wireup)
         {
             IStoreEvents store = Wireup.Init()
                 .LogToOutputWindow()
-                .UsingInMemoryPersistence() 
-                .EnlistInAmbientTransaction() 
+                .UsingInMemoryPersistence()
+                .EnlistInAmbientTransaction()
                 .InitializeStorageEngine()
                 .Build();
 
@@ -31,7 +31,6 @@ namespace GHI.EventRepository.Impl
                             .Use<EventStoreUnitOfWorkFactory>();
                     }
                 );
-            
         }
     }
 }

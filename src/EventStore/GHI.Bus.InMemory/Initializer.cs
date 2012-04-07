@@ -3,9 +3,9 @@ using GHI.WireUp;
 
 namespace GHI.Bus.InMemory
 {
-    public static class Initializer
+    public class Initializer : IInitializer
     {
-        public static WireUpItem GetWireUp(InitializerWireUp wireup)
+        public WireUpItem GetWireUp(InitializerWireUp wireup)
         {
             return new WireUpItem(
                 x => x.Scan(

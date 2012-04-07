@@ -17,13 +17,36 @@ namespace GHI.WireUp
         readonly List<Assembly> _assemblies;
         
 
-        public InitializerWireUp(string assemblyPrefix, bool runDefaults)
+        public InitializerWireUp(string assemblyPrefix, bool runDefaults, IEnumerable<AssemblyName> assembliesNotReferencedToLoad)
         {
             _wireUpItems = new List<WireUpItem>();
             _log = LogManager.GetLogger(GetType());
-            Assembly.GetAssembly(GetType()).LoadAllDependencies(x => x.Name.StartsWith(assemblyPrefix));
+            foreach (var assemblyName in assembliesNotReferencedToLoad)
+            {
+                AppDomain.CurrentDomain.Load(assemblyName);
+            }
+            
+            Assembly.GetAssembly(Assembly.GetExecutingAssembly().GetType()).LoadAllDependencies(x => x.Name.StartsWith(assemblyPrefix));
             _assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(assembly => assembly.FullName.StartsWith(assemblyPrefix)).ToList();
             if (runDefaults) RunDefaults();
+
+
+            foreach (var assembly in _assemblies)
+            {
+                foreach (var type in assembly.GetTypes())
+                {
+                    foreach (Type @interface in type.GetInterfaces())
+                    {
+                        if (@interface.FullName == typeof(IInitializer).FullName)
+                        {
+                            IInitializer initializer = (IInitializer) Activator.CreateInstance(type);
+                            AddInitialization(initializer.GetWireUp(this));
+                        }
+                    }
+                }
+            }
+
+            Initialize();
         }
 
         private void RunDefaults()
@@ -46,8 +69,8 @@ namespace GHI.WireUp
                                                      s.WithDefaultConventions();
                                                  });
                                      }));
-        }
 
+        }
 
 
 
@@ -57,7 +80,7 @@ namespace GHI.WireUp
         }
 
 
-        public void Initialize()
+        private void Initialize()
         {
             foreach (WireUpItem item in _wireUpItems)
             {   
@@ -66,7 +89,7 @@ namespace GHI.WireUp
             ObjectFactory.AssertConfigurationIsValid();
         }
 
-        public void AddInitialization(WireUpItem item)
+        private void AddInitialization(WireUpItem item)
         {
             _wireUpItems.Add(item);
         }
