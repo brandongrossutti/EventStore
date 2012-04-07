@@ -29,6 +29,10 @@ namespace GHI.EventStore.Tests
             GetTestAggregateRootResponse response = (GetTestAggregateRootResponse) requestResponseClient.SendRequest(new GetTestAggregateRootRequest(id));
 
             publisher.SendMessage(new ChangeAddressCommand(id, "test"));
+            publisher.SendMessage(new ChangeAddressCommand(id, "test"));
+            publisher.SendMessage(new ChangeAddressCommand(id, "SnapshotTime"));
+            publisher.SendMessage(new ChangeAddressCommand(id, "test"));
+            publisher.SendMessage(new ChangeAddressCommand(id, "test"));
 
             Assert.AreEqual(id,response.Id);
         }

@@ -14,6 +14,7 @@ namespace GHI.EventRepository.Impl
         {
             IStoreEvents store = Wireup.Init()
                 .LogToOutputWindow()
+                //.UsingSqlPersistence()
                 .UsingInMemoryPersistence()
                 .EnlistInAmbientTransaction()
                 .InitializeStorageEngine()
@@ -33,7 +34,8 @@ namespace GHI.EventRepository.Impl
 
                         x.For<ISnapShotStrategy>()
                             .Singleton()
-                            .Use<NeverSnapShotStrategy>();
+                            .Use<SnapShotBasedOnMessageCountStrategy>()
+                            .Ctor<int>().Is(3);
                     }
                 );
         }
