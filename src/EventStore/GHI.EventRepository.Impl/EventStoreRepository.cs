@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventStore;
-using GHI.Commons.Context;
 
 namespace GHI.EventRepository.Impl
 {
     public class EventStoreRepository : IRepository<Guid>, IDisposable
     {
         private readonly IStoreEvents _eventStore;
-        private readonly ILocalContext _localContext;
 
         public EventStoreRepository(IStoreEvents eventStore)
         {

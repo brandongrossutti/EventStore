@@ -1,4 +1,5 @@
 ﻿using System;
+using GHI.EventStore.Tests.TestClasses;
 using NUnit.Framework;
 
 namespace GHI.EventStore.Tests

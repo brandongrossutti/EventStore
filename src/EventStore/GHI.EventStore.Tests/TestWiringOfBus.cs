@@ -1,6 +1,7 @@
 ﻿using System;
 using GHI.Bus;
 using GHI.EventRepository.Impl;
+using GHI.EventStore.Tests.TestClasses;
 using GHI.WireUp;
 using NUnit.Framework;
 using StructureMap;

@@ -48,16 +48,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddressChangedEvent.cs" />
-    <Compile Include="GetTestAggregateRootRequest.cs" />
-    <Compile Include="GetTestAggregateRootRequestHandler.cs" />
-    <Compile Include="GetTestAggregateRootResponse.cs" />
-    <Compile Include="TestAggregateRoot.cs" />
-    <Compile Include="CreateNewTestAggregateRootCommandHandler.cs" />
-    <Compile Include="CreateTestAggregateRootEvent.cs" />
+    <Compile Include="TestClasses\AddressChangedEvent.cs" />
+    <Compile Include="TestClasses\GetTestAggregateRootRequest.cs" />
+    <Compile Include="TestClasses\GetTestAggregateRootRequestHandler.cs" />
+    <Compile Include="TestClasses\GetTestAggregateRootResponse.cs" />
+    <Compile Include="TestClasses\TestAggregateRoot.cs" />
+    <Compile Include="TestClasses\CreateNewTestAggregateRootCommandHandler.cs" />
+    <Compile Include="TestClasses\CreateTestAggregateRootEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAggregateRootExecution.cs" />
-    <Compile Include="CreateNewTestAggregateRootCommand.cs" />
+    <Compile Include="TestClasses\CreateNewTestAggregateRootCommand.cs" />
     <Compile Include="TestWiringOfBus.cs" />
   </ItemGroup>
   <ItemGroup>

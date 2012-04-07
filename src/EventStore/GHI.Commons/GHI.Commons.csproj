@@ -51,10 +51,6 @@
     <Compile Include="Configuration\InMemoryConfigurationProvider.cs" />
     <Compile Include="Configuration\IConfigurationProvider.cs" />
     <Compile Include="Configuration\SettingNotFoundException.cs" />
-    <Compile Include="Context\IContext.cs" />
-    <Compile Include="Context\LocalContextKey.cs" />
-    <Compile Include="Context\ThreadLocalContext.cs" />
-    <Compile Include="Delegate\DelegateAdjuster.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="IOC\IContainer.cs" />
     <Compile Include="IOC\StructureMapContainer.cs" />
