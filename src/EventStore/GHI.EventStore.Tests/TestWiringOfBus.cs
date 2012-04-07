@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 using GHI.Bus;
 using GHI.EventStore.Tests.TestClasses;
 using GHI.WireUp;

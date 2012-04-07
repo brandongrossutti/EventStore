@@ -1,7 +1,6 @@
 using System;
 using GHI.Bus;
 using GHI.EventRepository;
-using GHI.EventRepository.Impl.UnitOfWork;
 
 namespace GHI.EventStore.Tests.TestClasses
 {
@@ -17,7 +16,7 @@ namespace GHI.EventStore.Tests.TestClasses
         public void HandleMessage(CreateNewTestAggregateRootCommand message)
         {
             TestAggregateRoot root = new TestAggregateRoot(message.Id);
-            EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(root);
+            _repository.Save(root);
         }
     }
 }   

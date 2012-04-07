@@ -5,6 +5,7 @@ namespace GHI.WireUp
 {
     public class InitializerWireUpBuilder
     {
+        
         private bool RunDefaults { get; set; }
         private string AssemblyPrefix { get; set; }
         private List<AssemblyName> AssembliesNotReferencedToLoad { get; set; }

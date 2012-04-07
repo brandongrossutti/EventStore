@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventStore;
+using GHI.EventRepository.Impl.UnitOfWork;
 
 namespace GHI.EventRepository.Impl
 {
@@ -28,11 +29,19 @@ namespace GHI.EventRepository.Impl
                 T obj = new T();
                 obj.LoadFromRepository(events);
                 _trackedRoots.Add(id,obj);
+                EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(obj);
                 return obj;
             }
-            return (T) root;
+            T ret = (T) root;
+            EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(ret);
+            return ret;
         }
 
+        public void Save<TY>(TY root) where TY : AggregateRoot, new()
+        {
+            AddTrackedRoot(root);
+            EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(root);
+        }
 
         public IEventStream OpenStream(Guid id)
         {
@@ -46,7 +55,10 @@ namespace GHI.EventRepository.Impl
 
         public void AddTrackedRoot(AggregateRoot aggregateRoot)
         {
-            _trackedRoots.Add(aggregateRoot.Id, aggregateRoot);   
+            if (!_trackedRoots.ContainsKey(aggregateRoot.Id))
+            {
+                _trackedRoots.Add(aggregateRoot.Id, aggregateRoot);
+            }
         }
     }
 }

@@ -35,7 +35,10 @@ namespace GHI.EventRepository.Impl.UnitOfWork
         public static void RegisterAggregateRoot<T>(AggregateRoot aggregateRoot)
         {
             var unitOfWork = Current;
-            unitOfWork._aggregateRootsAffected.Add(aggregateRoot);
+            if (!unitOfWork._aggregateRootsAffected.Contains(aggregateRoot))
+            {
+                unitOfWork._aggregateRootsAffected.Add(aggregateRoot);
+            }
         }
 
 
@@ -43,16 +46,18 @@ namespace GHI.EventRepository.Impl.UnitOfWork
         {
             foreach (AggregateRoot aggregateRoot in _aggregateRootsAffected)
             {
-                IEventStream eventStream = _eventStorage.OpenStream(aggregateRoot.Id);
-                foreach (IEvent uncommittedEvent in aggregateRoot.UncommittedEvents)
+                if (aggregateRoot.HasUncommittedEvents)
                 {
-                    EventMessage message = new EventMessage();
-                    message.Body = uncommittedEvent;
-                    eventStream.Add(message);
+                    IEventStream eventStream = _eventStorage.OpenStream(aggregateRoot.Id);
+                    foreach (IEvent uncommittedEvent in aggregateRoot.UncommittedEvents)
+                    {
+                        EventMessage message = new EventMessage();
+                        message.Body = uncommittedEvent;
+                        eventStream.Add(message);
+                    }
+                    eventStream.CommitChanges(aggregateRoot.Id);
+                    aggregateRoot.ClearUncommitedEvents();
                 }
-                eventStream.CommitChanges(aggregateRoot.Id);
-                aggregateRoot.ClearUncommitedEvents();
-                _eventStorage.AddTrackedRoot(aggregateRoot);
             }
 
             _aggregateRootsAffected.Clear();

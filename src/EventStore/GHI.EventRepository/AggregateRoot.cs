@@ -19,6 +19,11 @@ namespace GHI.EventRepository
             get { return _uncommitedEvents; }
         }
 
+        public bool HasUncommittedEvents    
+        {
+            get { return _uncommitedEvents.Count > 0; }
+        }
+
         protected void OnEvent(IEvent @event)
         {
             OnEvent(@event, true);

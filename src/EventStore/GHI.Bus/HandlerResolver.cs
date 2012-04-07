@@ -41,7 +41,7 @@ namespace GHI.Bus
                     messageHandler.GetType().GetMethod("HandleMessage").Invoke(messageHandler, new[] { message });
                     unitOfWork.Commit();
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
                     unitOfWork.RollBack();
                 }
