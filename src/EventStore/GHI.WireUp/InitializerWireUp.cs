@@ -34,7 +34,7 @@ namespace GHI.WireUp
                                          x.For<IContainer>()
                                              .Singleton()
                                              .Use<StructureMapContainer>();
-                                             
+
 
                                          x.Scan(
                                              s =>
@@ -54,13 +54,11 @@ namespace GHI.WireUp
         public IEnumerable<Assembly> Assemblies
         {
             get { return _assemblies; }
-           
         }
 
 
         public void Initialize()
         {
-
             foreach (WireUpItem item in _wireUpItems)
             {   
                 ObjectFactory.Configure(item.Expression);

@@ -59,7 +59,7 @@
     <Compile Include="IRequestResponseServer.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestHandlerScanner.cs" />
+    <Compile Include="RequestHandlerTypeConvention.cs" />
     <Compile Include="Response.cs" />
   </ItemGroup>
   <ItemGroup>

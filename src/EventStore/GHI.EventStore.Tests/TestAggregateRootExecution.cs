@@ -12,8 +12,7 @@ namespace GHI.EventStore.Tests
         {
             TestAggregateRoot aggregateRootImpl = new TestAggregateRoot(Guid.NewGuid());
             aggregateRootImpl.ChangeAddress("testingSuccess");
-            Assert.AreEqual(aggregateRootImpl.Address, "testingSuccess");
-            
+            Assert.AreEqual("testingSuccess",aggregateRootImpl.Address);
         }
     }
 }

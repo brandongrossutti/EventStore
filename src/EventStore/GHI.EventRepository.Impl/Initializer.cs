@@ -13,8 +13,8 @@ namespace GHI.EventRepository.Impl
         {
             IStoreEvents store = Wireup.Init()
                 .LogToOutputWindow()
-                .UsingInMemoryPersistence() // Connection string is in app.config
-                .EnlistInAmbientTransaction() // two-phase commit
+                .UsingInMemoryPersistence() 
+                .EnlistInAmbientTransaction() 
                 .InitializeStorageEngine()
                 .Build();
 

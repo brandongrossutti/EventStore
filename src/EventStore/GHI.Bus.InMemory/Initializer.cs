@@ -3,7 +3,7 @@ using GHI.WireUp;
 
 namespace GHI.Bus.InMemory
 {
-    public  class Initializer
+    public static class Initializer
     {
         public static WireUpItem GetWireUp(InitializerWireUp wireup)
         {

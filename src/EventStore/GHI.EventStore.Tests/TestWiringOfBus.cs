@@ -29,7 +29,6 @@ namespace GHI.EventStore.Tests
             GetTestAggregateRootResponse response = (GetTestAggregateRootResponse) requestResponseClient.SendRequest(new GetTestAggregateRootRequest(id));
 
             Assert.AreEqual(id,response.Id);
-
         }
     }
 }

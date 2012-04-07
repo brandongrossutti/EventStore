@@ -15,6 +15,3 @@ namespace GHI.Bus.InMemory
         }
     }
 }
-
-
-
