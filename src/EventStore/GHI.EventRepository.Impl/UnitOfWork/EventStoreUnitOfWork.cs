@@ -48,6 +48,7 @@ namespace GHI.EventRepository.Impl.UnitOfWork
             {
                 if (aggregateRoot.HasUncommittedEvents)
                 {
+                    Guid commitId = Guid.NewGuid();
                     IEventStream eventStream = _eventStorage.OpenStream(aggregateRoot.Id);
                     foreach (IEvent uncommittedEvent in aggregateRoot.UncommittedEvents)
                     {
@@ -55,11 +56,10 @@ namespace GHI.EventRepository.Impl.UnitOfWork
                         message.Body = uncommittedEvent;
                         eventStream.Add(message);
                     }
-                    eventStream.CommitChanges(aggregateRoot.Id);
+                    eventStream.CommitChanges(commitId);
                     aggregateRoot.ClearUncommitedEvents();
                 }
             }
-
             _aggregateRootsAffected.Clear();
         }
 

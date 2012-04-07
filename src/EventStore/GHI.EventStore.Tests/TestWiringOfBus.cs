@@ -28,6 +28,8 @@ namespace GHI.EventStore.Tests
             IRequestResponseClient requestResponseClient = container.GetInstance<IRequestResponseClient>();
             GetTestAggregateRootResponse response = (GetTestAggregateRootResponse) requestResponseClient.SendRequest(new GetTestAggregateRootRequest(id));
 
+            publisher.SendMessage(new ChangeAddressCommand(id, "test"));
+
             Assert.AreEqual(id,response.Id);
         }
     }

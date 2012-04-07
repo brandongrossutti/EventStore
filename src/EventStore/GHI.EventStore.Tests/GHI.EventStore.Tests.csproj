@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestClasses\AddressChangedEvent.cs" />
+    <Compile Include="TestClasses\ChangeAddressCommand.cs" />
+    <Compile Include="TestClasses\ChangeAddressCommandHandler.cs" />
     <Compile Include="TestClasses\GetTestAggregateRootRequest.cs" />
     <Compile Include="TestClasses\GetTestAggregateRootRequestHandler.cs" />
     <Compile Include="TestClasses\GetTestAggregateRootResponse.cs" />
