@@ -38,6 +38,7 @@ namespace GHI.Bus.InMemory
                                     {
                                         s.Assembly(assembly);
                                         s.With<MessageHandlerTypeScanner>();
+                                        s.With<RequestHandlerTypeScanner>();
                                     }
                                     s.WithDefaultConventions();
                                 });

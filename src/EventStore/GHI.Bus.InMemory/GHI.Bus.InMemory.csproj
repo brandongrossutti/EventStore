@@ -48,6 +48,8 @@
     <Compile Include="MessagePublisher.cs" />
     <Compile Include="MessageSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestResponseClient.cs" />
+    <Compile Include="RequestResponseServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

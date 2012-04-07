@@ -24,6 +24,11 @@ namespace GHI.EventStore.Tests
             Guid id = Guid.NewGuid();
             publisher.SendMessage(new CreateNewTestAggregateRootCommand(id));
 
+            IRequestResponseClient requestResponseClient = container.GetInstance<IRequestResponseClient>();
+            GetTestAggregateRootResponse response = (GetTestAggregateRootResponse) requestResponseClient.SendRequest(new GetTestAggregateRootRequest(id));
+
+            Assert.AreEqual(id,response.Id);
+
         }
     }
 }

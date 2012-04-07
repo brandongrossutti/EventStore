@@ -18,7 +18,7 @@ namespace GHI.EventRepository.Impl
 
         public T GetAggregateRoot<T>(Guid id) where T : AggregateRoot, new()
         {
-            IEventStream stream = _eventStore.OpenStream(Guid.NewGuid(), 0, int.MaxValue);
+            IEventStream stream = _eventStore.OpenStream(id, 0, int.MaxValue);
             List<IEvent> events = stream.CommittedEvents.Select(committedEvent => committedEvent.Body as IEvent).ToList();
             T obj = new T();
             obj.LoadFromRepository(events);
@@ -32,7 +32,7 @@ namespace GHI.EventRepository.Impl
 
         public IEventStream OpenStream(Guid id)
         {
-            return _eventStore.OpenStream(Guid.NewGuid(), 0, int.MaxValue);
+            return _eventStore.OpenStream(id, 0, int.MaxValue);
         }
 
         public void Dispose()

@@ -49,7 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressChangedEvent.cs" />
-    <Compile Include="EventStoreSessionFinder.cs" />
+    <Compile Include="GetTestAggregateRootRequest.cs" />
+    <Compile Include="GetTestAggregateRootRequestHandler.cs" />
+    <Compile Include="GetTestAggregateRootResponse.cs" />
     <Compile Include="TestAggregateRoot.cs" />
     <Compile Include="CreateNewTestAggregateRootCommandHandler.cs" />
     <Compile Include="CreateTestAggregateRootEvent.cs" />
