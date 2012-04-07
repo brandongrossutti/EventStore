@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using GHI.Commons.IOC;
+using GHI.Commons.Logging;
 using GHI.Commons.UnitOfWork;
-using log4net;
 
 
 namespace GHI.Bus
@@ -11,13 +11,13 @@ namespace GHI.Bus
     {
         private readonly IContainer _container;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly ILog _log;
+        private readonly ILogEvents _logger;
 
-        public HandlerResolver(IContainer container, IUnitOfWorkFactory unitOfWorkFactory)
+        public HandlerResolver(IContainer container, IUnitOfWorkFactory unitOfWorkFactory, ILogEvents logger)
         {
             _container = container;
             _unitOfWorkFactory = unitOfWorkFactory;
-            _log = LogManager.GetLogger(GetType());
+            _logger = logger;
         }
 
         public void ExecuteHandler(Message message)
@@ -34,15 +34,16 @@ namespace GHI.Bus
                     }
                     catch (TypeNotRegisteredException)
                     {
-                        _log.DebugFormat("There is no handler registered for the message type '{0}'.",
-                                         messageHandlerType.FullName);
+                        _logger.Log(String.Format("There is no handler registered for the message type '{0}'.",messageHandlerType.FullName),LogLevel.Error,GetType());
                         return;
                     }
                     messageHandler.GetType().GetMethod("HandleMessage").Invoke(messageHandler, new[] { message });
                     unitOfWork.Commit();
+                    _logger.Log("commited", LogLevel.Info, GetType());
                 }
                 catch (Exception exception)
                 {
+                    _logger.Log(exception.ToString(), LogLevel.Error, GetType());
                     unitOfWork.RollBack();
                 }
             }
@@ -63,8 +64,11 @@ namespace GHI.Bus
             }
             catch (TypeNotRegisteredException)
             {
+                string errorMessage = string.Format("There is no handler registered for the request type '{0}'.",
+                                                    requestType.FullName);
+                _logger.Log(errorMessage, LogLevel.Error, GetType());
                 response = (Response)Activator.CreateInstance(responseType);
-                response.Failed(string.Format("There is no handler registered for the request type '{0}'.", requestType.FullName), null);
+                response.Failed(errorMessage, null);
                 return response;
             }
 
@@ -90,7 +94,7 @@ namespace GHI.Bus
                     string message = exception.InnerException != null ? exception.InnerException.Message : exception.Message;
                     response.Failed(message, exception);
                     unitOfWork.RollBack();
-                    _log.ErrorFormat("Unable to process request {0}{1}{2}", request, Environment.NewLine, exception);
+                    _logger.Log(string.Format("Unable to process request {0}{1}{2}", request, Environment.NewLine, exception), LogLevel.Error, GetType());
                 }
 
                 return response;

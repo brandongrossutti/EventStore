@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using GHI.Commons.Extensions;
 using GHI.Commons.IOC;
+using GHI.Commons.Logging;
 using StructureMap;
-using log4net;
 using IContainer = GHI.Commons.IOC.IContainer;
 
 namespace GHI.WireUp
@@ -13,14 +13,12 @@ namespace GHI.WireUp
     public class InitializerWireUp
     {
         private readonly List<WireUpItem> _wireUpItems;
-        private ILog _log;
         readonly List<Assembly> _assemblies;
         
 
         public InitializerWireUp(string assemblyPrefix, bool runDefaults, IEnumerable<AssemblyName> assembliesNotReferencedToLoad)
         {
             _wireUpItems = new List<WireUpItem>();
-            _log = LogManager.GetLogger(GetType());
             foreach (var assemblyName in assembliesNotReferencedToLoad)
             {
                 AppDomain.CurrentDomain.Load(assemblyName);
@@ -57,6 +55,10 @@ namespace GHI.WireUp
                                          x.For<IContainer>()
                                              .Singleton()
                                              .Use<StructureMapContainer>();
+
+                                         x.For<ILogEvents>()
+                                             .Singleton()
+                                             .Use<ConsoleLogger>();
 
 
                                          x.Scan(

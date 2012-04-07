@@ -33,8 +33,7 @@ namespace GHI.EventRepository.Impl
 
         private AggregateRoot LoadAggregateRootFromStream<T>(Guid id) where T :  AggregateRoot, new()
         {
-            LoadSnapShot(id);
-            IEventStream stream = _eventStore.OpenStream(id, 0, int.MaxValue);
+            IEventStream stream = LoadRoot(id);
             List<IEvent> events =
                 stream.CommittedEvents.Select(committedEvent => committedEvent.Body as IEvent).ToList();
             T root = new T();
@@ -49,14 +48,17 @@ namespace GHI.EventRepository.Impl
             _eventStore.Advanced.AddSnapshot(snapshot);
         }
 
-        private void LoadSnapShot(Guid id)
+        private IEventStream LoadRoot(Guid id)
         {
+            IEventStream stream;
             Snapshot snapShot = _eventStore.Advanced.GetSnapshot(id, int.MaxValue);
             if (snapShot != null)
             {
-
-                IEventStream stream = _eventStore.OpenStream(snapShot, int.MaxValue);
+                stream = _eventStore.OpenStream(snapShot, int.MaxValue);
+                return stream;
             }
+            stream = _eventStore.OpenStream(id, 0, int.MaxValue);
+            return stream;
         }
 
         public void Save<TY>(TY root) where TY : AggregateRoot, new()
@@ -73,6 +75,7 @@ namespace GHI.EventRepository.Impl
         public void Dispose()
         {
             _eventStore = null;
+            GC.SuppressFinalize(this);
         }
 
         private void AddCachedRoot(AggregateRoot aggregateRoot)
