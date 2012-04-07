@@ -1,1 +1,2 @@
-This is my first go at eventstore, major issues thus far are the way in which i am doing UoW and having to register aggregate roots in handlers in order to do a proper commit stepping through tests is best way to get a feel for the system.  Comments are always welcome
+This is my first go at eventstore, the major issue i have right now is the UoW Factory, not sure if its the most elegant
+Comments are always welcome
