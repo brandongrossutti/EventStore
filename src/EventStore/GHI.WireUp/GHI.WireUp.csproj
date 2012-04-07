@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="IInitializer.cs" />
     <Compile Include="InitializerWireUp.cs" />
+    <Compile Include="InitializerWireUpBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WireUpItem.cs" />
   </ItemGroup>

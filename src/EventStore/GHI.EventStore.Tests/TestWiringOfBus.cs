@@ -16,12 +16,11 @@ namespace GHI.EventStore.Tests
         [Test]
         public void TestMessageSend()
         {
-            var assembliesNotReferencedToLoad = new List<AssemblyName>()
-                                                    {
-                                                        new AssemblyName("GHI.EventRepository.Impl"), 
-                                                        new AssemblyName("GHI.Bus.InMemory")
-                                                    };
-            InitializerWireUp wireup = new InitializerWireUp("GHI", true, assembliesNotReferencedToLoad);
+            InitializerWireUp wireUp = new InitializerWireUpBuilder()
+                .LoadAssemblyPrefix("GHI")
+                .ShouldRunDefault(true)
+                .WithAssemblyNotReferencedToLoad("GHI.EventRepository.Impl")
+                .WithAssemblyNotReferencedToLoad("GHI.Bus.InMemory");
 
             IContainer container = (IContainer) ObjectFactory.GetInstance(typeof(IContainer));
             IMessagePublisher publisher = container.GetInstance<IMessagePublisher>();
