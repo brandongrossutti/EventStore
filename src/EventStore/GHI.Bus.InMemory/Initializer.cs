@@ -1,10 +1,5 @@
 ﻿using System.Reflection;
-using GHI.Commons.Configuration;
-using GHI.Commons.IOC;
 using GHI.WireUp;
-using StructureMap;
-using StructureMap.Attributes;
-using IContainer = GHI.Commons.IOC.IContainer;
 
 namespace GHI.Bus.InMemory
 {
@@ -13,42 +8,17 @@ namespace GHI.Bus.InMemory
         public static WireUpItem GetWireUp(InitializerWireUp wireup)
         {
             return new WireUpItem(
-                x =>
-                    {
-                        x.ForRequestedType<IConfigurationProvider>()
-                            .TheDefaultIsConcreteType<InMemoryConfigurationProvider>()
-                            .CacheBy(InstanceScope.Singleton);
-
-                        x.ForRequestedType<IContainer>()
-                            .TheDefaultIsConcreteType<StructureMapContainer>()
-                            .CacheBy(InstanceScope.Singleton);
-
-                        x.ForRequestedType<IMessageSubscriber>()
-                            .TheDefaultIsConcreteType<MessageSubscriber>()
-                            .CacheBy(InstanceScope.Singleton);
-
-                        x.ForRequestedType<IMessagePublisher>()
-                            .TheDefaultIsConcreteType<MessagePublisher>()
-                            .CacheBy(InstanceScope.Singleton);
-
-                        x.ForRequestedType<IHandlerResolver>()
-                            .TheDefaultIsConcreteType<HandlerResolver>()
-                            .CacheBy(InstanceScope.Singleton);
-
-                        x.Scan(
-                            s =>
-                                {
-                                    foreach (Assembly assembly in wireup.Assemblies)
-                                    {
-                                        s.Assembly(assembly);
-                                        s.With<MessageHandlerTypeScanner>();
-                                        s.With<RequestHandlerTypeScanner>();
-                                    }
-                                    s.WithDefaultConventions();
-                                });
-
-
-                    });
+                x => x.Scan(
+                    s =>
+                        {
+                            foreach (Assembly assembly in wireup.Assemblies)
+                            {
+                                s.Assembly(assembly);
+                                s.With<MessageHandlerTypeScanner>();
+                                s.With<RequestHandlerTypeScanner>();
+                            }
+                            s.WithDefaultConventions();
+                        }));
         }
     }
 }

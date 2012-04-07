@@ -4,7 +4,6 @@ using GHI.Commons.UnitOfWork;
 using GHI.EventRepository.Impl.UnitOfWork;
 using GHI.WireUp;
 using StructureMap;
-using StructureMap.Attributes;
 
 namespace GHI.EventRepository.Impl
 {
@@ -12,7 +11,7 @@ namespace GHI.EventRepository.Impl
     {
         public static WireUpItem GetWireUp()
         {
-            IStoreEvents store = EventStore.Wireup.Init()
+            IStoreEvents store = Wireup.Init()
                 .LogToOutputWindow()
                 .UsingInMemoryPersistence() // Connection string is in app.config
                 .EnlistInAmbientTransaction() // two-phase commit
@@ -24,14 +23,12 @@ namespace GHI.EventRepository.Impl
             return new WireUpItem(
                 x =>
                     {
-                        x.ForRequestedType<IRepository<Guid>>()
-                            .TheDefaultIsConcreteType<EventStoreRepository>()
-                            .CacheBy(InstanceScope.Singleton);
+                        x.For<IRepository<Guid>>()
+                            .Singleton()
+                            .Use<EventStoreRepository>();
 
-                        x.ForRequestedType<IUnitOfWorkFactory>()
-                            .TheDefaultIsConcreteType<EventStoreUnitOfWorkFactory>();
-
-
+                        x.For<IUnitOfWorkFactory>()
+                            .Use<EventStoreUnitOfWorkFactory>();
                     }
                 );
             

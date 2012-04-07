@@ -5,7 +5,6 @@ using System.Reflection;
 using GHI.Commons.Extensions;
 using GHI.Commons.IOC;
 using StructureMap;
-using StructureMap.Attributes;
 using log4net;
 using IContainer = GHI.Commons.IOC.IContainer;
 
@@ -32,9 +31,10 @@ namespace GHI.WireUp
             _wireUpItems.Add(new WireUpItem(
                                  x =>
                                      {
-                                         x.ForRequestedType<IContainer>()
-                                             .TheDefaultIsConcreteType<StructureMapContainer>()
-                                             .CacheBy(InstanceScope.Singleton);
+                                         x.For<IContainer>()
+                                             .Singleton()
+                                             .Use<StructureMapContainer>();
+                                             
 
                                          x.Scan(
                                              s =>
@@ -51,7 +51,7 @@ namespace GHI.WireUp
 
 
 
-        public List<Assembly> Assemblies
+        public IEnumerable<Assembly> Assemblies
         {
             get { return _assemblies; }
            
