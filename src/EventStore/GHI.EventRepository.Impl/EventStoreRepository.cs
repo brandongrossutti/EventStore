@@ -10,7 +10,6 @@ namespace GHI.EventRepository.Impl
     public class EventStoreRepository : IRepository<Guid>, IDisposable
     {
         private IStoreEvents _eventStore;
-        private readonly ISnapShotStrategy _snapShotStrategy;
         private readonly Dictionary<Guid, AggregateRoot> _cachedRoots;
         private readonly SnapShotTracker _snapShotTracker;
         
@@ -18,9 +17,8 @@ namespace GHI.EventRepository.Impl
         public EventStoreRepository(IStoreEvents eventStore, ISnapShotStrategy snapShotStrategy)
         {
             _eventStore = eventStore;
-            _snapShotStrategy = snapShotStrategy;
             _cachedRoots = new Dictionary<Guid, AggregateRoot>();
-            _snapShotTracker = new SnapShotTracker();
+            _snapShotTracker = new SnapShotTracker(snapShotStrategy);
         }
 
         public T GetAggregateRoot<T>(Guid id) where T : AggregateRoot, new()
@@ -108,8 +106,8 @@ namespace GHI.EventRepository.Impl
                     eventStream.Add(message);
                 }
                 eventStream.CommitChanges(commitId);
-                int lastSnapShotSequence = _snapShotTracker.GetLastSequence(aggregateRoot.Id);
-                if(_snapShotStrategy.ShouldSnapShot(lastSnapShotSequence, eventStream.CommitSequence))
+
+                if(_snapShotTracker.ShouldSnapShot(aggregateRoot.Id, eventStream.CommitSequence))
                 {
                     TakeSnapshot(aggregateRoot);
                 }

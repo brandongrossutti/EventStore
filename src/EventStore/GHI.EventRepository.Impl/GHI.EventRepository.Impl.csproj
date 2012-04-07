@@ -61,7 +61,7 @@
     <Compile Include="SnapShotting\ISnapShotStrategy.cs" />
     <Compile Include="SnapShotting\NeverSnapShotStrategy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SnapShotTracker.cs" />
+    <Compile Include="SnapShotting\SnapShotTracker.cs" />
     <Compile Include="UnitOfWork\EventStoreUnitOfWork.cs" />
     <Compile Include="UnitOfWork\EventStoreUnitOfWorkFactory.cs" />
   </ItemGroup>
