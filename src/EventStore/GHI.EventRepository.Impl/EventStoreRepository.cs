@@ -9,37 +9,41 @@ namespace GHI.EventRepository.Impl
     public class EventStoreRepository : IRepository<Guid>, IDisposable
     {
         private IStoreEvents _eventStore;
-        private readonly Dictionary<Guid, object> _trackedRoots;
+        private readonly Dictionary<Guid, AggregateRoot> _cachedRoots;
 
         public EventStoreRepository(IStoreEvents eventStore)
         {
             _eventStore = eventStore;
-            _trackedRoots = new Dictionary<Guid, object>();
+            _cachedRoots = new Dictionary<Guid, AggregateRoot>();
         }
 
         public T GetAggregateRoot<T>(Guid id) where T : AggregateRoot, new()
         {
-            object root;
-            _trackedRoots.TryGetValue(id, out root);
+            AggregateRoot root;
+            _cachedRoots.TryGetValue(id, out root);
             if (root == null)
             {
-                IEventStream stream = _eventStore.OpenStream(id, 0, int.MaxValue);
-                List<IEvent> events =
-                    stream.CommittedEvents.Select(committedEvent => committedEvent.Body as IEvent).ToList();
-                T obj = new T();
-                obj.LoadFromRepository(events);
-                _trackedRoots.Add(id,obj);
-                EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(obj);
-                return obj;
+                root = LoadAggregateRootFromStream<T>(id);
+                AddCachedRoot(root);
             }
             T ret = (T) root;
             EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(ret);
             return ret;
         }
 
+        private AggregateRoot LoadAggregateRootFromStream<T>(Guid id) where T :  AggregateRoot, new()
+        {
+            IEventStream stream = _eventStore.OpenStream(id, 0, int.MaxValue);
+            List<IEvent> events =
+                stream.CommittedEvents.Select(committedEvent => committedEvent.Body as IEvent).ToList();
+            T root = new T();
+            root.LoadFromRepository(events);
+            return root;
+        }
+
         public void Save<TY>(TY root) where TY : AggregateRoot, new()
         {
-            AddTrackedRoot(root);
+            AddCachedRoot(root);
             EventStoreUnitOfWork.RegisterAggregateRoot<Guid>(root);
         }
 
@@ -53,11 +57,11 @@ namespace GHI.EventRepository.Impl
             _eventStore = null;
         }
 
-        public void AddTrackedRoot(AggregateRoot aggregateRoot)
+        private void AddCachedRoot(AggregateRoot aggregateRoot)
         {
-            if (!_trackedRoots.ContainsKey(aggregateRoot.Id))
+            if (!_cachedRoots.ContainsKey(aggregateRoot.Id))
             {
-                _trackedRoots.Add(aggregateRoot.Id, aggregateRoot);
+                _cachedRoots.Add(aggregateRoot.Id, aggregateRoot);
             }
         }
     }
