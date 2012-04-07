@@ -1,18 +1,19 @@
 ﻿using System;
+using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
 namespace GHI.Bus
 {
-    public class RequestHandlerTypeScanner : ITypeScanner
+    public class RequestHandlerTypeConvention : IRegistrationConvention
     {
-        public void Process(Type type, PluginGraph graph)
+        public void Process(Type type, Registry registry)
         {
             Type[] interfaces = type.GetInterfaces();
             foreach (Type interfaceType in interfaces)
             {
                 if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IRequestHandler<,>))
                 {
-                    graph.Configure(x => x.ForRequestedType(interfaceType).TheDefaultIsConcreteType(type));
+                    registry.For(interfaceType).Use(type);
                 }
             }
         }

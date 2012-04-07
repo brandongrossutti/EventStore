@@ -50,7 +50,7 @@
   <ItemGroup>
     <Compile Include="IRequest.cs" />
     <Compile Include="IRequestHandler.cs" />
-    <Compile Include="MessageHandlerTypeScanner.cs" />
+    <Compile Include="MessageHandlerTypeConvention.cs" />
     <Compile Include="HandlerResolver.cs" />
     <Compile Include="IMessageHandler.cs" />
     <Compile Include="IMessagePublisher.cs" />

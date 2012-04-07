@@ -8,7 +8,7 @@ namespace GHI.EventRepository.Impl
     public class EventStoreRepository : IRepository<Guid>, IDisposable
     {
         private IStoreEvents _eventStore;
-        private Dictionary<Guid, object> _trackedRoots;
+        private readonly Dictionary<Guid, object> _trackedRoots;
 
         public EventStoreRepository(IStoreEvents eventStore)
         {

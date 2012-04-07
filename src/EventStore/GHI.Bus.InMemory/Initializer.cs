@@ -14,8 +14,8 @@ namespace GHI.Bus.InMemory
                             foreach (Assembly assembly in wireup.Assemblies)
                             {
                                 s.Assembly(assembly);
-                                s.With<MessageHandlerTypeScanner>();
-                                s.With<RequestHandlerTypeScanner>();
+                                s.Convention<MessageHandlerTypeConvention>();
+                                s.Convention<RequestHandlerTypeConvention>();
                             }
                             s.WithDefaultConventions();
                         }));
