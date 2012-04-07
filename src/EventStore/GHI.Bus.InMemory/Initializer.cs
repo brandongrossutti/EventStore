@@ -31,6 +31,10 @@ namespace GHI.Bus.InMemory
                             .TheDefaultIsConcreteType<MessagePublisher>()
                             .CacheBy(InstanceScope.Singleton);
 
+                        x.ForRequestedType<IHandlerResolver>()
+                            .TheDefaultIsConcreteType<HandlerResolver>()
+                            .CacheBy(InstanceScope.Singleton);
+
                         x.Scan(
                             s =>
                                 {

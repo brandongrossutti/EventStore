@@ -7,7 +7,7 @@ using log4net;
 
 namespace GHI.Bus
 {
-    public class HandlerResolver
+    public class HandlerResolver : IHandlerResolver
     {
         private readonly IContainer _container;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -111,5 +111,11 @@ namespace GHI.Bus
             }
             return responseType;
         }
+    }
+
+    public interface IHandlerResolver
+    {
+        void ExecuteHandler(Message message);
+        Response ExecuteRequestHandler(IRequest request);
     }
 }

@@ -2,9 +2,9 @@ namespace GHI.Bus.InMemory
 {
     public class RequestResponseServer : IRequestResponseServer
     {
-        private readonly HandlerResolver _resolver;
+        private readonly IHandlerResolver _resolver;
 
-        public RequestResponseServer(HandlerResolver resolver)
+        public RequestResponseServer(IHandlerResolver resolver)
         {
             _resolver = resolver;
         }

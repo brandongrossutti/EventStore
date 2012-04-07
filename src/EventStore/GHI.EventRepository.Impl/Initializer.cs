@@ -25,10 +25,13 @@ namespace GHI.EventRepository.Impl
                 x =>
                     {
                         x.ForRequestedType<IRepository<Guid>>()
-                            .TheDefaultIsConcreteType<EventStoreRepository>();
+                            .TheDefaultIsConcreteType<EventStoreRepository>()
+                            .CacheBy(InstanceScope.Singleton);
 
                         x.ForRequestedType<IUnitOfWorkFactory>()
                             .TheDefaultIsConcreteType<EventStoreUnitOfWorkFactory>();
+
+
                     }
                 );
             

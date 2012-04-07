@@ -1,12 +1,13 @@
+using System;
 using GHI.Commons.UnitOfWork;
 
 namespace GHI.EventRepository.Impl.UnitOfWork
 {
     public class EventStoreUnitOfWorkFactory : IUnitOfWorkFactory
     {
-        private readonly EventStoreRepository _repository;
+        private readonly IRepository<Guid> _repository;
 
-        public EventStoreUnitOfWorkFactory(EventStoreRepository repository)
+        public EventStoreUnitOfWorkFactory(IRepository<Guid> repository)
         {
             _repository = repository;
         }

@@ -13,9 +13,9 @@ namespace GHI.EventRepository.Impl.UnitOfWork
         [ThreadStatic]
         private static EventStoreUnitOfWork _current;
 
-        internal EventStoreUnitOfWork(EventStoreRepository eventStorage)
+        internal EventStoreUnitOfWork(IRepository<Guid> eventStorage)
         {
-            _eventStorage = eventStorage;
+            _eventStorage = eventStorage as EventStoreRepository;
             if (_current != null)
                 throw new InvalidOperationException("Cannot nest unit of work");
 
@@ -52,6 +52,7 @@ namespace GHI.EventRepository.Impl.UnitOfWork
                 }
                 eventStream.CommitChanges(aggregateRoot.Id);
                 aggregateRoot.ClearUncommitedEvents();
+                _eventStorage.AddTrackedRoot(aggregateRoot);
             }
 
             _aggregateRootsAffected.Clear();

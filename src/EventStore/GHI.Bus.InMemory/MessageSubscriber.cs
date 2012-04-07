@@ -2,9 +2,9 @@ namespace GHI.Bus.InMemory
 {
     public class MessageSubscriber : IMessageSubscriber
     {
-        private readonly HandlerResolver _resolver;
+        private readonly IHandlerResolver _resolver;
 
-        public MessageSubscriber(HandlerResolver resolver)
+        public MessageSubscriber(IHandlerResolver resolver)
         {
             _resolver = resolver;
         }
