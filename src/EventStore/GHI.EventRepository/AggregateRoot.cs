@@ -48,7 +48,7 @@ namespace GHI.EventRepository
 
         /// <summary>
         /// TODO
-        /// we have affected state of aggregate root but are not commiting those events to store
+        /// we have affected state of aggregate root but are not commiting those events to store if rollbackis called in UoW
         /// we need to relaod our aggregate to the state that it was prior to the last events commited
         /// </summary>
         public void ReloadAggregateRoot(){}
