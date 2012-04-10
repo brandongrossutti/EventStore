@@ -13,5 +13,10 @@ namespace GHI.Bus.InMemory
         {
            _resolver.ExecuteHandler(message);
         }
+
+        public void Dispose()
+        {
+
+        }
     }
 }

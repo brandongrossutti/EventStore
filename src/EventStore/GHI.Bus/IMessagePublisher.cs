@@ -1,6 +1,8 @@
+using System;
+
 namespace GHI.Bus
 {
-    public interface IMessagePublisher
+    public interface IMessagePublisher : IDisposable
     {
         void SendMessage(Message message);
     }

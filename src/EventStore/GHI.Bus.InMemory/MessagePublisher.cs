@@ -12,5 +12,10 @@ namespace GHI.Bus.InMemory
         {
             _messageSubscriber.ReceiveMessage(message);
         }
+
+        public void Dispose()
+        {
+            
+        }
     }
 }

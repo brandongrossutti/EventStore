@@ -32,9 +32,8 @@ namespace GHI.EventRepository
         private void OnEvent(IEvent @event, bool isNew)
         {
             string eventName = "On" + @event.GetType().Name.Replace("Event", "");
-            dynamic inheritingClass = this;
-            MethodInfo method = inheritingClass.GetType().GetMethod(eventName);
-            method.Invoke(inheritingClass, new object[] { @event });
+            MethodInfo method = GetType().GetMethod(eventName);
+            method.Invoke(this, new object[] { @event });
             if (isNew)_uncommitedEvents.Add(@event);
         }
 

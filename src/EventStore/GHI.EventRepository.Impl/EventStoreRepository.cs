@@ -36,19 +36,6 @@ namespace GHI.EventRepository.Impl
 
         private AggregateRoot LoadAggregateRootFromStream<T>(Guid id) where T :  AggregateRoot, new()
         {
-            return LoadRoot<T>(id);
-        }
-
-        private void TakeSnapshot(AggregateRoot root)
-        {
-            IEventStream stream = _eventStore.OpenStream(root.Id, 0, int.MaxValue);
-            Snapshot snapshot = new Snapshot(root.Id, stream.CommitSequence, root);
-            _eventStore.Advanced.AddSnapshot(snapshot);
-            _snapShotTracker.SetLastSequence(root.Id, stream.CommitSequence);
-        }
-
-        private T LoadRoot<T>(Guid id) where T : AggregateRoot, new()
-        {
             IEventStream stream;
             Snapshot snapShot = _eventStore.Advanced.GetSnapshot(id, int.MaxValue);
             if (snapShot != null)
@@ -64,13 +51,21 @@ namespace GHI.EventRepository.Impl
 
         private T LoadFromSnapShot<T>(Guid id, Snapshot snapShot) where T : AggregateRoot, new()
         {
-            T root = (T) snapShot.Payload;
+            T root = (T)snapShot.Payload;
             int lastSnapShotSequence = snapShot.StreamRevision;
             _snapShotTracker.SetLastSequence(id, lastSnapShotSequence);
             IEventStream stream = _eventStore.OpenStream(snapShot, int.MaxValue);
             List<IEvent> events = stream.CommittedEvents.Select(committedEvent => committedEvent.Body as IEvent).ToList();
             root.LoadFromRepository(events);
             return root;
+        }
+
+        private void TakeSnapshot(AggregateRoot root)
+        {
+            IEventStream stream = _eventStore.OpenStream(root.Id, 0, int.MaxValue);
+            Snapshot snapshot = new Snapshot(root.Id, stream.CommitSequence, root);
+            _eventStore.Advanced.AddSnapshot(snapshot);
+            _snapShotTracker.SetLastSequence(root.Id, stream.CommitSequence);
         }
 
         public void Save<TY>(TY root) where TY : AggregateRoot, new()

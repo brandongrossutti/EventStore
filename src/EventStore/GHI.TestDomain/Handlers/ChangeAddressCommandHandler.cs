@@ -1,8 +1,10 @@
 ﻿using System;
 using GHI.Bus;
 using GHI.EventRepository;
+using GHI.TestDomain.Messages;
+using GHI.TestDomain.Model;
 
-namespace GHI.EventStore.Tests.TestClasses
+namespace GHI.TestDomain.Handlers
 {
     public class ChangeAddressCommandHandler : IMessageHandler<ChangeAddressCommand>
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using GHI.EventStore.Tests.TestClasses;
+using GHI.TestDomain.Model;
 using NUnit.Framework;
 
-namespace GHI.EventStore.Tests
+namespace GHI.EventRepository.Tests
 {
     [TestFixture]
     public class TestAggregateRootExecution

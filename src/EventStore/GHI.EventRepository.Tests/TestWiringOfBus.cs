@@ -1,12 +1,12 @@
 ﻿using System;
 using GHI.Bus;
-using GHI.EventStore.Tests.TestClasses;
+using GHI.TestDomain.Messages;
 using GHI.WireUp;
 using NUnit.Framework;
 using StructureMap;
 using IContainer = GHI.Commons.IOC.IContainer;
 
-namespace GHI.EventStore.Tests
+namespace GHI.EventRepository.Tests
 {
     [TestFixture]
     public class TestWiringOfBus

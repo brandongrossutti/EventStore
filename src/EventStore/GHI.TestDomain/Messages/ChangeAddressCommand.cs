@@ -1,8 +1,9 @@
 ﻿using System;
 using GHI.Bus;
 
-namespace GHI.EventStore.Tests.TestClasses
+namespace GHI.TestDomain.Messages
 {
+    [Serializable]
     public class ChangeAddressCommand : Message
     {
         public ChangeAddressCommand(Guid id, string value)

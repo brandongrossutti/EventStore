@@ -68,7 +68,7 @@ namespace GHI.WireUp
                                                      {
                                                          s.Assembly(assembly);
                                                      }
-                                                     s.WithDefaultConventions();
+                                                    // s.WithDefaultConventions();
                                                  });
                                      }));
 

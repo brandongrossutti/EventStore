@@ -10,6 +10,12 @@ namespace GHI.WireUp
         private string AssemblyPrefix { get; set; }
         private List<AssemblyName> AssembliesNotReferencedToLoad { get; set; }
 
+        public InitializerWireUpBuilder()
+        {
+            AssembliesNotReferencedToLoad = new List<AssemblyName>();
+            RunDefaults = false;
+        }
+
         public InitializerWireUpBuilder ShouldRunDefault(bool runDefaults)
         {
             RunDefaults = runDefaults;

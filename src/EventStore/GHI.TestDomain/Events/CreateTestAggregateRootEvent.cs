@@ -1,7 +1,7 @@
 using System;
 using GHI.EventRepository;
 
-namespace GHI.EventStore.Tests.TestClasses
+namespace GHI.TestDomain.Events
 {
     public class CreateTestAggregateRootEvent : IEvent
     {

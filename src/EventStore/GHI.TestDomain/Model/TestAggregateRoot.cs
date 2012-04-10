@@ -1,7 +1,8 @@
 using System;
 using GHI.EventRepository;
+using GHI.TestDomain.Events;
 
-namespace GHI.EventStore.Tests.TestClasses
+namespace GHI.TestDomain.Model
 {
     public class TestAggregateRoot : AggregateRoot
     {
