@@ -1,5 +1,4 @@
-﻿using System;
-using ZMQ;
+﻿using ZMQ;
 
 namespace GHI.Bus.ZeroMQ
 {
@@ -7,7 +6,7 @@ namespace GHI.Bus.ZeroMQ
     {
         private readonly OnTheWireBusConfiguration _configuration;
         private readonly Socket _publisher;
-        private Context _context;
+        private readonly Context _context;
 
         public MessagePublisher(OnTheWireBusConfiguration configuration)
         {

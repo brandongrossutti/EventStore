@@ -50,7 +50,7 @@ namespace GHI.Bus.ZeroMQ
             }
         }
 
-        public void ProcessMessage(Message message)
+        private void ProcessMessage(Message message)
         {
             _resolver.ExecuteHandler(message);
         }

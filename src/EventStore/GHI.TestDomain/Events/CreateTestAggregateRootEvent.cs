@@ -1,5 +1,5 @@
 using System;
-using GHI.EventRepository;
+using GHI.Domain;
 
 namespace GHI.TestDomain.Events
 {

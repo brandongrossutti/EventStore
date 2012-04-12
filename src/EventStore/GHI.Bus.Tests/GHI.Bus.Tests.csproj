@@ -60,6 +60,10 @@
       <Project>{43F90451-6A99-4C71-A5B9-8BD9DCFB8F67}</Project>
       <Name>GHI.Commons</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GHI.Domain.Mapping\GHI.Domain.Mapping.csproj">
+      <Project>{E7BBC36B-BEC0-437E-ACD6-9ADE64F55D94}</Project>
+      <Name>GHI.Domain.Mapping</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GHI.EventRepository.Impl\GHI.EventRepository.Impl.csproj">
       <Project>{C29E06CC-CA35-4482-A1F3-68AD142BBC08}</Project>
       <Name>GHI.EventRepository.Impl</Name>

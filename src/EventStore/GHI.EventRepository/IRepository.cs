@@ -1,3 +1,5 @@
+using GHI.Domain;
+
 namespace GHI.EventRepository
 {
     public interface IRepository<T>

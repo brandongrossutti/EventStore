@@ -1,3 +1,4 @@
+using GHI.Domain;
 using GHI.EventRepository;
 
 namespace GHI.TestDomain.Events

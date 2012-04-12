@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using EventStore;
+using GHI.Domain;
 using GHI.EventRepository.Impl.SnapShotting;
 using GHI.EventRepository.Impl.UnitOfWork;
 

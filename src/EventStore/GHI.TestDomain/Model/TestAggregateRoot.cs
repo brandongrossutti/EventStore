@@ -1,6 +1,8 @@
 using System;
-using GHI.EventRepository;
+using GHI.Domain;
+using GHI.Domain.Mapping;
 using GHI.TestDomain.Events;
+using GHI.TestDomain.Messages;
 
 namespace GHI.TestDomain.Model
 {
@@ -15,11 +17,21 @@ namespace GHI.TestDomain.Model
             OnEvent(new CreateTestAggregateRootEvent(id));
         }
 
+        public void TestAggregateRoute(CreateTestAggregateRootCommand command)
+        {
+            OnEvent(new CreateTestAggregateRootEvent(command.AggregateId));
+        }
+
         public TestAggregateRoot() { }
 
         public void OnCreateTestAggregateRoot(CreateTestAggregateRootEvent @event)
         {
             _id = @event.Id;
+        }
+
+        public void ExecuteChangeAddressCommand(ChangeAddressCommand command)
+        {
+            OnEvent(new AddressChangedEvent(command.Value));
         }
 
         public void ChangeAddress(string value)
@@ -35,6 +47,13 @@ namespace GHI.TestDomain.Model
         public override Guid Id
         {
             get { return _id; }
+        }
+    }
+
+    public class CreateTestAggregateRootCommand:Command
+    {
+        public CreateTestAggregateRootCommand(Guid aggregateId) : base(aggregateId)
+        {
         }
     }
 }

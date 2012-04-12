@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace GHI.EventRepository
+namespace GHI.Domain
 {
     public abstract class AggregateRoot
     {

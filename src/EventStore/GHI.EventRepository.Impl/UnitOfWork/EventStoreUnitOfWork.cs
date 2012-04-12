@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GHI.Commons.UnitOfWork;
+using GHI.Domain;
 
 namespace GHI.EventRepository.Impl.UnitOfWork
 {

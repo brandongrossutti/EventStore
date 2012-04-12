@@ -1,4 +1,4 @@
-namespace GHI.EventRepository
+namespace GHI.Domain
 {
     public interface IEvent
     {
