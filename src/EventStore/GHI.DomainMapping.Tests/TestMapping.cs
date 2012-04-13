@@ -20,13 +20,14 @@ namespace GHI.DomainMapping.Tests
             InitializerWireUp wireUp = new InitializerWireUpBuilder()
                 .LoadAssemblyPrefix("GHI")
                 .ShouldRunDefault(true)
-                .WithAssemblyNotReferencedToLoad("GHI.EventRepository.Impl");
-            
+                .WithAssemblyNotReferencedToLoad("GHI.EventRepository.Impl")
+                .WithAssemblyNotReferencedToLoad("GHI.Bus.InMemory");
+
             IContainer container = (IContainer)ObjectFactory.GetInstance(typeof(IContainer));
             IRepository<Guid> repository = container.GetInstance<IRepository<Guid>>();
             IUnitOfWorkFactory unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
 
-            AggregateRootInspector inspector = new AggregateRootInspector(unitOfWorkFactory); 
+            AggregateRootInspector inspector = new AggregateRootInspector(unitOfWorkFactory, container); 
             inspector.InspectAggregateRoot(typeof(TestAggregateRoot));
 
             Guid aggregateId = Guid.NewGuid();

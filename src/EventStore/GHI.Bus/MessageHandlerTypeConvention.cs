@@ -11,7 +11,7 @@ namespace GHI.Bus
             Type[] interfaces = type.GetInterfaces();
             foreach (Type interfaceType in interfaces)
             {
-                if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IMessageHandler<>))
+                if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(ICommandHandler<>))
                 {
                     registry.For(interfaceType).Use(type);
                 }

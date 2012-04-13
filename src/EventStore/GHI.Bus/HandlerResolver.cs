@@ -26,7 +26,7 @@ namespace GHI.Bus
             {
                 try
                 {
-                    Type messageHandlerType = typeof(IMessageHandler<>).MakeGenericType(new[] { message.GetType() });
+                    Type messageHandlerType = typeof(ICommandHandler<>).MakeGenericType(new[] { message.GetType() });
                     object messageHandler;
                     try
                     {
@@ -37,7 +37,7 @@ namespace GHI.Bus
                         _logger.Log(String.Format("There is no handler registered for the message type '{0}'.",messageHandlerType.FullName),LogLevel.Error,GetType());
                         return;
                     }
-                    messageHandler.GetType().GetMethod("HandleMessage").Invoke(messageHandler, new[] { message });
+                    messageHandler.GetType().GetMethod("HandleCommand").Invoke(messageHandler, new[] { message });
                     unitOfWork.Commit();
                     _logger.Log("commited", LogLevel.Info, GetType());
                 }

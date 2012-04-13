@@ -49,7 +49,7 @@
     <Compile Include="IRequestHandler.cs" />
     <Compile Include="MessageHandlerTypeConvention.cs" />
     <Compile Include="HandlerResolver.cs" />
-    <Compile Include="IMessageHandler.cs" />
+    <Compile Include="ICommandHandler.cs" />
     <Compile Include="IMessagePublisher.cs" />
     <Compile Include="IMessageSubscriber.cs" />
     <Compile Include="IRequestResponseClient.cs" />

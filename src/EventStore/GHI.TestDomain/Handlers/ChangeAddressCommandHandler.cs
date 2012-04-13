@@ -6,7 +6,7 @@ using GHI.TestDomain.Model;
 
 namespace GHI.TestDomain.Handlers
 {
-    public class ChangeAddressCommandHandler : IMessageHandler<ChangeAddressCommand>
+    public class ChangeAddressCommandHandler : ICommandHandler<ChangeAddressCommand>
     {
         private readonly IRepository<Guid> _repository;
 
@@ -15,7 +15,7 @@ namespace GHI.TestDomain.Handlers
             _repository = repository;
         }
 
-        public void HandleMessage(ChangeAddressCommand message)
+        public void HandleCommand(ChangeAddressCommand message)
         {
             TestAggregateRoot root = _repository.GetAggregateRoot<TestAggregateRoot>(message.Id);
             root.ChangeAddress(message.Value);

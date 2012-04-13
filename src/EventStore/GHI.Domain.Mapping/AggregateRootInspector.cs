@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using GHI.Bus;
+using GHI.Commons.IOC;
 using GHI.Commons.UnitOfWork;
 using GHI.EventRepository;
 
@@ -10,10 +12,12 @@ namespace GHI.Domain.Mapping
     {
         private readonly Dictionary<Type, MethodInfo> _aggregateHandlers;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly IContainer _container;
 
-        public AggregateRootInspector(IUnitOfWorkFactory unitOfWorkFactory)
+        public AggregateRootInspector(IUnitOfWorkFactory unitOfWorkFactory, IContainer container)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
+            _container = container;
             _aggregateHandlers = new Dictionary<Type,MethodInfo>();
         }
 
@@ -49,25 +53,39 @@ namespace GHI.Domain.Mapping
             {
                 try
                 {
-                    MethodInfo commandHandler;
-                    _aggregateHandlers.TryGetValue(command.GetType(), out commandHandler);
-
-                    if (commandHandler == null)
+                    Type commandHandlerType = typeof(ICommandHandler<>).MakeGenericType(new[] { command.GetType() });
+                    object commandHandler = commandHandler = _container.TryGetInstance(commandHandlerType);
+                    if (commandHandler != null)
                     {
-                        //log that not registered
-                        return;
+                        RouteToOverride(commandHandler, command);
                     }
                     else
                     {
-                        Type aggregateType = commandHandler.ReflectedType;
-                        AggregateRoot root = (AggregateRoot)typeof(IRepository<Guid>)
-                                                                 .GetMethod("GetAggregateRoot")
-                                                                 .MakeGenericMethod(aggregateType)
-                                                                 .Invoke(repository, new object[] { command.AggregateId });
+                        MethodInfo commandHandlerMethod;
+                        _aggregateHandlers.TryGetValue(command.GetType(), out commandHandlerMethod);
 
-                        if (root != null)
+                        if (commandHandlerMethod == null)
                         {
-                            commandHandler.Invoke(root, new object[] { command });
+                            //log that not registered
+                            return;
+                        }
+                        else
+                        {
+                            Type aggregateType = commandHandlerMethod.ReflectedType;
+                            AggregateRoot root = (AggregateRoot) typeof (IRepository<Guid>)
+                                                                     .GetMethod("GetAggregateRoot")
+                                                                     .MakeGenericMethod(aggregateType)
+                                                                     .Invoke(repository,
+                                                                             new object[] {command.AggregateId});
+
+                            if (root != null)
+                            {
+                                commandHandlerMethod.Invoke(root, new object[] {command});
+                            }
+                            else
+                            {
+                                //log throw
+                            }
                         }
                     }
                     unitOfWork.Commit();
@@ -79,6 +97,11 @@ namespace GHI.Domain.Mapping
                     unitOfWork.RollBack();
                 }
             }
+        }
+
+        private void RouteToOverride(object commandHandler, Command command)
+        {
+            commandHandler.GetType().GetMethod("HandleCommand").Invoke(commandHandler, new[] { command });
         }
     }
 }

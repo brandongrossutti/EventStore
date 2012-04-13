@@ -12,5 +12,6 @@ namespace GHI.Commons.IOC
         T GetInstance<T>(string key);
         IEnumerable<T> GetAllInstances<T>();
         void DisposeAllInstances();
+        object TryGetInstance(Type serviceType);
     }
 }

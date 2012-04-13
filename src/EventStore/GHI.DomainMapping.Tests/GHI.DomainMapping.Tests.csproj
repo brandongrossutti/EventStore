@@ -50,6 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GHI.Bus.InMemory\GHI.Bus.InMemory.csproj">
+      <Project>{27B9E3DA-19E4-420F-8EA2-1E04714BF954}</Project>
+      <Name>GHI.Bus.InMemory</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GHI.Bus\GHI.Bus.csproj">
       <Project>{271622D2-8BC1-43B9-98F0-DAB07026C91F}</Project>
       <Name>GHI.Bus</Name>

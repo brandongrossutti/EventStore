@@ -30,6 +30,17 @@ namespace GHI.Commons.IOC
             }
         }
 
+        public object TryGetInstance(Type serviceType)
+        {
+            lock (lockObject)
+            {
+                {
+                    return ObjectFactory.TryGetInstance(serviceType);
+                }
+            }
+        }
+
+
         public object GetInstance(Type serviceType, string key)
         {
             throw new NotImplementedException();
@@ -69,5 +80,7 @@ namespace GHI.Commons.IOC
                 }
             }
         }
+
+
     }
 }

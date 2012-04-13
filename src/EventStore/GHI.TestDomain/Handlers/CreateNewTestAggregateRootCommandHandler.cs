@@ -6,7 +6,7 @@ using GHI.TestDomain.Model;
 
 namespace GHI.TestDomain.Handlers
 {
-    public class CreateNewTestAggregateRootCommandHandler : IMessageHandler<CreateNewTestAggregateRootCommand>
+    public class CreateNewTestAggregateRootCommandHandler : ICommandHandler<CreateNewTestAggregateRootCommand>
     {
         private readonly IRepository<Guid> _repository;
 
@@ -15,7 +15,7 @@ namespace GHI.TestDomain.Handlers
             _repository = repository;
         }
 
-        public void HandleMessage(CreateNewTestAggregateRootCommand message)
+        public void HandleCommand(CreateNewTestAggregateRootCommand message)
         {
             TestAggregateRoot root = new TestAggregateRoot(message.Id);
             _repository.Save(root);
