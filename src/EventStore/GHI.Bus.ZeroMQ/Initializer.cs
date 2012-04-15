@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using GHI.Domain.Mapping;
 using GHI.WireUp;
 using StructureMap;
 
@@ -27,7 +28,7 @@ namespace GHI.Bus.ZeroMQ
 
 
                         x.For<IHandlerResolver>()
-                            .Use<HandlerResolver>();
+                            .Use<AggregateRootInspector>();
 
 
                         x.Scan(

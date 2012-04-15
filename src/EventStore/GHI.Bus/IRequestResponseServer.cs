@@ -2,6 +2,6 @@
 {
     public interface IRequestResponseServer
     {
-        Response ProcessRequest(IRequest request);
+        Response ProcessRequest<T>(Command<T> command) where T : Response;
     }
 }

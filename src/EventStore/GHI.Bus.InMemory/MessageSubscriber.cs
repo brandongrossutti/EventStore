@@ -1,3 +1,5 @@
+using GHI.Domain.Mapping;
+
 namespace GHI.Bus.InMemory
 {
     public class MessageSubscriber : IMessageSubscriber

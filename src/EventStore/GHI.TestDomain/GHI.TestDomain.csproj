@@ -45,10 +45,9 @@
     <Compile Include="Messages\ChangeAddressCommand.cs" />
     <Compile Include="Handlers\ChangeAddressCommandHandler.cs" />
     <Compile Include="Messages\CreateNewTestAggregateRootCommand.cs" />
-    <Compile Include="Handlers\CreateNewTestAggregateRootCommandHandler.cs" />
     <Compile Include="Events\CreateTestAggregateRootEvent.cs" />
     <Compile Include="Messages\GetTestAggregateRootRequest.cs" />
-    <Compile Include="Handlers\GetTestAggregateRootRequestHandler.cs" />
+    <Compile Include="Handlers\GetTestAggregateRootCommandHandler.cs" />
     <Compile Include="Messages\GetTestAggregateRootResponse.cs" />
     <Compile Include="Model\TestAggregateRoot.cs" />
   </ItemGroup>

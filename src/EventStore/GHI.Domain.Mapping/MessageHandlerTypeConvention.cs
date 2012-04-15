@@ -2,16 +2,16 @@
 using StructureMap.Configuration.DSL;
 using StructureMap.Graph;
 
-namespace GHI.Bus
+namespace GHI.Domain.Mapping
 {
-    public class RequestHandlerTypeConvention : IRegistrationConvention
+    public class MessageHandlerTypeConvention : IRegistrationConvention
     {
         public void Process(Type type, Registry registry)
         {
             Type[] interfaces = type.GetInterfaces();
             foreach (Type interfaceType in interfaces)
             {
-                if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IRequestHandler<,>))
+                if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(ICommandHandler<>))
                 {
                     registry.For(interfaceType).Use(type);
                 }

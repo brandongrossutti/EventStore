@@ -1,5 +1,6 @@
 using System;
 using GHI.Bus;
+using GHI.Domain.Mapping;
 
 namespace GHI.TestDomain.Messages
 {

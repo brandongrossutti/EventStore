@@ -1,5 +1,6 @@
 ﻿using System;
 using GHI.Bus;
+using GHI.Domain.Mapping;
 using GHI.EventRepository;
 using GHI.TestDomain.Messages;
 using GHI.TestDomain.Model;

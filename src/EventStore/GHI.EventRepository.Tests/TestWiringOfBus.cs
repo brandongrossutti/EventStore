@@ -1,6 +1,8 @@
 ﻿using System;
 using GHI.Bus;
+using GHI.Domain.Mapping;
 using GHI.TestDomain.Messages;
+using GHI.TestDomain.Model;
 using GHI.WireUp;
 using NUnit.Framework;
 using StructureMap;
@@ -21,12 +23,14 @@ namespace GHI.EventRepository.Tests
                 .WithAssemblyNotReferencedToLoad("GHI.Bus.InMemory");
 
             IContainer container = (IContainer) ObjectFactory.GetInstance(typeof(IContainer));
+            AggregateRootInspector inspector = (AggregateRootInspector) container.GetInstance<IHandlerResolver>();
+            inspector.InspectAggregateRoot(typeof(TestAggregateRoot));
             IMessagePublisher publisher = container.GetInstance<IMessagePublisher>();
             Guid id = Guid.NewGuid();
             publisher.SendMessage(new CreateNewTestAggregateRootCommand(id));
 
             IRequestResponseClient requestResponseClient = container.GetInstance<IRequestResponseClient>();
-            GetTestAggregateRootResponse response = (GetTestAggregateRootResponse) requestResponseClient.SendRequest(new GetTestAggregateRootRequest(id));
+            GetTestAggregateRootResponse response = (GetTestAggregateRootResponse) requestResponseClient.SendRequest<GetTestAggregateRootResponse>(new GetTestAggregateRootRequest(id));
 
             publisher.SendMessage(new ChangeAddressCommand(id, "test"));
             publisher.SendMessage(new ChangeAddressCommand(id, "test"));

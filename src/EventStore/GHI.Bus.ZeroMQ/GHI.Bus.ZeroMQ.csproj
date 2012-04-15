@@ -65,6 +65,10 @@
       <Project>{271622D2-8BC1-43B9-98F0-DAB07026C91F}</Project>
       <Name>GHI.Bus</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GHI.Domain.Mapping\GHI.Domain.Mapping.csproj">
+      <Project>{E7BBC36B-BEC0-437E-ACD6-9ADE64F55D94}</Project>
+      <Name>GHI.Domain.Mapping</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GHI.WireUp\GHI.WireUp.csproj">
       <Project>{E3C2C7AF-3DD2-4985-A1AE-785C4F7B248C}</Project>
       <Name>GHI.WireUp</Name>

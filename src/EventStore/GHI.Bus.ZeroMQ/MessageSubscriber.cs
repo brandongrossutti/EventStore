@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
+using GHI.Domain.Mapping;
 using ZMQ;
 
 namespace GHI.Bus.ZeroMQ

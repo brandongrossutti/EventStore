@@ -1,3 +1,5 @@
+using GHI.Domain.Mapping;
+
 namespace GHI.Bus.InMemory
 {
     public class RequestResponseClient : IRequestResponseClient
@@ -9,9 +11,9 @@ namespace GHI.Bus.InMemory
             _server = server;
         }
 
-        public Response SendRequest<T>(IRequest<T> request) where T : Response, new()
+        public Response SendRequest<T>(Command<T> request) where T : Response, new()
         {
-            return _server.ProcessRequest(request);
+            return _server.ProcessRequest<T>(request);
         }
     }
 }

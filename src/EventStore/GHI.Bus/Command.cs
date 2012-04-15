@@ -1,7 +1,6 @@
 ﻿using System;
-using GHI.Bus;
 
-namespace GHI.Domain.Mapping
+namespace GHI.Bus
 {
     [Serializable]
     public class Command : Message
@@ -18,6 +17,14 @@ namespace GHI.Domain.Mapping
             get {
                 return _aggregateId;
             }
+        }
+    }
+
+    [Serializable]
+    public class Command<T>:Command  where T: Response
+    {
+        public Command(Guid aggregateId) : base(aggregateId)
+        {
         }
     }
 }

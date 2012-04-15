@@ -1,6 +1,5 @@
 using System;
 using GHI.Domain;
-using GHI.Domain.Mapping;
 using GHI.TestDomain.Events;
 using GHI.TestDomain.Messages;
 
@@ -17,7 +16,7 @@ namespace GHI.TestDomain.Model
             OnEvent(new CreateTestAggregateRootEvent(id));
         }
 
-        public void TestAggregateRoute(CreateTestAggregateRootCommand command)
+        public void TestAggregateRoute(CreateNewTestAggregateRootCommand command)
         {
             OnEvent(new CreateTestAggregateRootEvent(command.AggregateId));
         }
@@ -47,13 +46,6 @@ namespace GHI.TestDomain.Model
         public override Guid Id
         {
             get { return _id; }
-        }
-    }
-
-    public class CreateTestAggregateRootCommand:Command
-    {
-        public CreateTestAggregateRootCommand(Guid aggregateId) : base(aggregateId)
-        {
         }
     }
 }

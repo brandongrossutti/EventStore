@@ -2,6 +2,6 @@
 {
     public interface IRequestResponseClient
     {
-        Response SendRequest<T>(IRequest<T> request) where T : Response, new();
+        Response SendRequest<T>(Command<T> request) where T : Response, new();
     }
 }

@@ -8,16 +8,18 @@ using GHI.EventRepository;
 
 namespace GHI.Domain.Mapping
 {
-    public class AggregateRootInspector
+    public class AggregateRootInspector : IHandlerResolver
     {
         private readonly Dictionary<Type, MethodInfo> _aggregateHandlers;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IContainer _container;
+        private readonly IRepository<Guid> _repository;
 
-        public AggregateRootInspector(IUnitOfWorkFactory unitOfWorkFactory, IContainer container)
+        public AggregateRootInspector(IUnitOfWorkFactory unitOfWorkFactory, IContainer container, IRepository<Guid> repository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _container = container;
+            _repository = repository;
             _aggregateHandlers = new Dictionary<Type,MethodInfo>();
         }
 
@@ -47,17 +49,28 @@ namespace GHI.Domain.Mapping
             }
         }
 
-        public void RouteCommand(IRepository<Guid> repository, Command command) 
+        private Response RouteCommand<T>(Command command) 
         {
             using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Create())
             {
                 try
                 {
+                    Type responseType = typeof (T);
+                    Response response=null;
                     Type commandHandlerType = typeof(ICommandHandler<>).MakeGenericType(new[] { command.GetType() });
-                    object commandHandler = commandHandler = _container.TryGetInstance(commandHandlerType);
+
+                    object commandHandler =  _container.TryGetInstance(commandHandlerType);
+
+                    //request response
+                    if (commandHandler == null)
+                    {
+                        Type[] paramaters =  { command.GetType(), responseType };
+                        commandHandlerType = typeof(IRequestHandler<,>).MakeGenericType(paramaters);
+                        commandHandler = _container.TryGetInstance(commandHandlerType);
+                    }
                     if (commandHandler != null)
                     {
-                        RouteToOverride(commandHandler, command);
+                        response = RouteToOverride<T>(commandHandler, command);
                     }
                     else
                     {
@@ -67,41 +80,63 @@ namespace GHI.Domain.Mapping
                         if (commandHandlerMethod == null)
                         {
                             //log that not registered
-                            return;
+                            response = (Response)Activator.CreateInstance(responseType);
+                            response.Failed("not registered", new Exception("could not find handler"));
+                            return response;
+                        }
+                        Type aggregateType = commandHandlerMethod.ReflectedType;
+                        AggregateRoot root = (AggregateRoot) typeof (IRepository<Guid>)
+                                                                 .GetMethod("GetAggregateRoot")
+                                                                 .MakeGenericMethod(aggregateType)
+                                                                 .Invoke(_repository,
+                                                                         new object[] {command.AggregateId});
+
+                        if (root != null)
+                        {
+                             response = commandHandlerMethod.Invoke(root, new object[] {command}) as Response;
                         }
                         else
                         {
-                            Type aggregateType = commandHandlerMethod.ReflectedType;
-                            AggregateRoot root = (AggregateRoot) typeof (IRepository<Guid>)
-                                                                     .GetMethod("GetAggregateRoot")
-                                                                     .MakeGenericMethod(aggregateType)
-                                                                     .Invoke(repository,
-                                                                             new object[] {command.AggregateId});
-
-                            if (root != null)
-                            {
-                                commandHandlerMethod.Invoke(root, new object[] {command});
-                            }
-                            else
-                            {
-                                //log throw
-                            }
+                            //log throw
                         }
                     }
                     unitOfWork.Commit();
+                    return response;
+
 
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
                     //log
                     unitOfWork.RollBack();
+
                 }
             }
+            Response defaultResponse = new Response();
+            defaultResponse.Success = false;
+            return defaultResponse;
         }
 
-        private void RouteToOverride(object commandHandler, Command command)
+        private Response RouteToOverride<T>(object commandHandler, Command command) // where T: Response
         {
-            commandHandler.GetType().GetMethod("HandleCommand").Invoke(commandHandler, new[] { command });
+            Console.WriteLine("Executed overrideHandler: " + command.ToString());
+            return commandHandler.GetType().GetMethod("HandleCommand").Invoke(commandHandler, new[] { command }) as Response;
         }
+
+        public void ExecuteHandler(Message message)
+        {
+            RouteCommand<Response>((Command)message);
+        }
+
+        public Response ExecuteRequestHandler<T>(Command request)
+        {
+            return RouteCommand<T>(request);
+        }
+    }
+
+    public interface IHandlerResolver
+    {
+        void ExecuteHandler(Message message);
+        Response ExecuteRequestHandler<T>(Command request);
     }
 }

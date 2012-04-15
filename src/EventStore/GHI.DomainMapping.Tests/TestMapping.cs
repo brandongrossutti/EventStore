@@ -27,12 +27,12 @@ namespace GHI.DomainMapping.Tests
             IRepository<Guid> repository = container.GetInstance<IRepository<Guid>>();
             IUnitOfWorkFactory unitOfWorkFactory = container.GetInstance<IUnitOfWorkFactory>();
 
-            AggregateRootInspector inspector = new AggregateRootInspector(unitOfWorkFactory, container); 
+            AggregateRootInspector inspector = new AggregateRootInspector(unitOfWorkFactory, container, repository);
             inspector.InspectAggregateRoot(typeof(TestAggregateRoot));
 
             Guid aggregateId = Guid.NewGuid();
-            inspector.RouteCommand(repository, new CreateTestAggregateRootCommand(aggregateId));
-            inspector.RouteCommand(repository, new ChangeAddressCommand(aggregateId, "testAddress"));
+            inspector.ExecuteHandler(new CreateNewTestAggregateRootCommand(aggregateId));
+            inspector.ExecuteHandler(new ChangeAddressCommand(aggregateId, "testAddress"));
 
         }
     }
